@@ -10,7 +10,7 @@ public class ImageTransferServer {
 
     public static void main(String[] args) {
         int port = 12345;
-        Path filePath = Path.of("C:\\Users\\SystemX\\IdeaProjects\\EPAM\\14laba\\14laba\\src\\main\\java\\org\\example\\A\\image_to_send.png"); // Заранее подготовленный файл для отправки
+        Path filePath = Path.of("src/main/java/org/example/A/image_to_send.png"); // Относительный путь к файлу
 
         if (!Files.exists(filePath)) {
             System.err.println("Файл для отправки не найден: " + filePath.toAbsolutePath());

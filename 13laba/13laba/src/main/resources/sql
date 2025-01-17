@@ -1,0 +1,39 @@
+-- Создание базы данных
+CREATE DATABASE city_residents2;
+
+-- Использование базы данных
+USE city_residents2;
+
+-- Создание таблицы для городов
+CREATE TABLE cities (
+    id INT AUTO_INCREMENT PRIMARY KEY,        -- Уникальный идентификатор города
+    name VARCHAR(255) NOT NULL,               -- Название города
+    year_founded INT NOT NULL,                -- Год основания города
+    area DOUBLE NOT NULL,                     -- Площадь города
+    population INT NOT NULL                   -- Население города
+);
+
+-- Создание таблицы для типов жителей
+CREATE TABLE resident_types (
+    id INT AUTO_INCREMENT PRIMARY KEY,        -- Уникальный идентификатор типа жителей
+    city_id INT NOT NULL,                     -- Идентификатор города (внешний ключ)
+    name VARCHAR(255) NOT NULL,               -- Название типа жителей
+    language VARCHAR(255) NOT NULL,           -- Язык общения жителей
+    FOREIGN KEY (city_id) REFERENCES cities(id)
+        ON DELETE CASCADE                     -- При удалении города удаляются его жители
+);
+
+-- Добавление данных в таблицу городов
+INSERT INTO cities (name, year_founded, area, population)
+VALUES
+    ('Москва', 1147, 2561.5, 12506468),       -- Москва
+    ('Санкт-Петербург', 1703, 1439.0, 5383890), -- Санкт-Петербург
+    ('Казань', 1005, 425.3, 1250000);         -- Казань
+
+-- Добавление данных в таблицу типов жителей
+INSERT INTO resident_types (city_id, name, language)
+VALUES
+    (1, 'Студенты', 'Русский'),              -- Студенты в Москве
+    (1, 'Рабочие', 'Русский'),               -- Рабочие в Москве
+    (2, 'Туристы', 'Русский'),               -- Туристы в Санкт-Петербурге
+    (3, 'Школьники', 'Татарский');           -- Школьники в Казани

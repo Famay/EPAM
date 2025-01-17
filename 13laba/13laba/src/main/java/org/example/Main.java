@@ -1,41 +1,33 @@
 package org.example;
 
-
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.sql.SQLException;
 
 public class Main {
     public static void main(String[] args) {
-        List<City> cities = Arrays.asList(
-                new City("Москва", 1147, 2511.0, Arrays.asList(
-                        new ResidentType("Рабочий", "Русский", 5000000),
-                        new ResidentType("Фермер", "Русский", 200000)
-                )),
-                new City("Париж", 508, 105.4, Arrays.asList(
-                        new ResidentType("Художник", "Французский", 300000),
-                        new ResidentType("Фермер", "Французский", 100000)
-                ))
-        );
 
-        CityRepository repository = new CityRepository(cities);
+        CityQueries queries = new CityQueries();
+        CityModification modification = new CityModification();
 
-        System.out.println("Жители Москвы, говорящие на русском:");
-        List<ResidentType> residents = repository.getResidentsByCityAndLanguage("Москва", "Русский");
-        residents.forEach(System.out::println);
+        try {
+            System.out.println("Жители Москвы, говорящие на русском:");
+            System.out.println(queries.getResidentsByCityAndLanguage("Москва", "Русский"));
 
-        System.out.println("\nГорода, где есть фермеры:");
-        List<City> citiesWithFarmers = repository.getCitiesByResidentType("Фермер");
-        citiesWithFarmers.forEach(System.out::println);
+            System.out.println("\nГорода, где живут рабочие:");
+            System.out.println(queries.getCitiesByResidentType("Рабочие"));
 
-        System.out.println("\nГород с населением 5000000:");
-        Optional<City> cityByPopulation = repository.getCityByPopulation(5000000);
-        cityByPopulation.ifPresent(System.out::println);
+            System.out.println("\nГород с населением 12506468:");
+            System.out.println(queries.getCityAndResidentsByPopulation(12506468));
 
-        System.out.println("\nСамый древний тип жителей:");
-        Optional<ResidentType> oldestResidentType = repository.getOldestResidentType();
-        oldestResidentType.ifPresent(System.out::println);
+            System.out.println("\nСамый древний тип жителей:");
+            System.out.println(queries.getOldestResidentType());
+
+            System.out.println("\nДобавляем новый город и тип жителей...");
+            modification.addCity("Казань", 1005, 425.3, 1200000);
+            modification.addResidentType(3, "Студенты", "Татарский");
+
+        } catch (SQLException e) {
+            System.out.println("Произошла ошибка при выполнении запросов:");
+            e.printStackTrace();
+        }
     }
 }
-
